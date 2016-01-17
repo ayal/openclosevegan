@@ -5,7 +5,7 @@ import { render } from 'react-dom'
 import { Router, Route, Link, History, Lifecycle } from 'react-router';
 
 import {geo} from './geo.js';
-import data from "./miso"
+
 
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
     var R = 6371; // Radius of the earth in km
@@ -37,58 +37,62 @@ if(geo.init()){
     });
 };
 
-var pid_meals = _.groupBy(data.meals, function(m){return m.pID;});
+$.get('miso.js', function(data) {
+    var pid_meals = _.groupBy(data.meals, function(m){return m.pID;});
 
-window.openclose = [];
-var gotPos = function() {
-    var now = new Date();
-    console.log(data.places)
-    window.openclose = _.compact(_.map(data.places, function(p){
-	var d = getDistanceFromLatLonInKm( p.lat, p.lng, pos.latitude, pos.longitude);
-	if (p.openJSON) {
-	    var openobj = JSON.parse(p.openJSON);
-	    var hours = Object.keys(openobj);
-	    var ok = false;
-	    var to = null;
-	    _.each(hours, function(hs){
-		var from = parseInt(hs.split('-')[0].split(':')[0]);
-		to = parseInt(hs.split('-')[1].split(':')[0]);
-		if (to === from) {
-		    // 24 / 7
-		    ok = true;
-		    return;
-		}
-		to = to < 6 ? 24 - to : to;
-		if (to < from) {
-		    var tfrom = from;
-		    from = to;
-		    to = tfrom;
-		}
-	
-		var nowhs = now.getHours() - 8;
-
-		if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
-		    if (from < nowhs && nowhs < to) {
-
-			// console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
+    window.openclose = [];
+    var gotPos = function() {
+	var now = new Date();
+	console.log(data.places)
+	window.openclose = _.compact(_.map(data.places, function(p){
+	    var d = getDistanceFromLatLonInKm( p.lat, p.lng, pos.latitude, pos.longitude);
+	    if (p.openJSON) {
+		var openobj = JSON.parse(p.openJSON);
+		var hours = Object.keys(openobj);
+		var ok = false;
+		var to = null;
+		_.each(hours, function(hs){
+		    var from = parseInt(hs.split('-')[0].split(':')[0]);
+		    to = parseInt(hs.split('-')[1].split(':')[0]);
+		    if (to === from) {
+			// 24 / 7
 			ok = true;
-			
+			return;
 		    }
-		    else {
-			console.log(from, nowhs, to, p)
+		    to = to < 6 ? 24 - to : to;
+		    if (to < from) {
+			var tfrom = from;
+			from = to;
+			to = tfrom;
 		    }
+		    
+		    var nowhs = now.getHours() - 8;
+
+		    if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
+			if (from < nowhs && nowhs < to) {
+
+			    // console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
+			    ok = true;
+			    
+			}
+			else {
+			    console.log(from, nowhs, to, p)
+			}
+		    }
+		})
+		
+		if (ok) {
+		    return {p: p, d: d, hs: to+':00', ms: pid_meals[p.pID]};
 		}
-	    })
-	    
-	    if (ok) {
-		return {p: p, d: d, hs: to+':00', ms: pid_meals[p.pID]};
 	    }
-	}
-    })).sort((a,b)=>(a.d - b.d))
+	})).sort((a,b)=>(a.d - b.d))
 
 
-    xupdate();    
-};
+	xupdate();    
+    };
+
+    
+})
 
 const Lista = React.createClass({
     clickplace: function(p) {
