@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b0f1307c71ec52fb0068"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2f6fab2e9f9c6c4ab7e8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -594,7 +594,7 @@
 	window.openclose = [];
 
 	fetch('miso.json').then(function (data) {
-					data.json().then(function () {
+					data.text().then(function (data) {
 									var pid_meals = _.groupBy(data.meals, function (m) {
 													return m.pID;
 									});
