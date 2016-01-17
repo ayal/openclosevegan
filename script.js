@@ -96,8 +96,7 @@ $.getJSON('miso.json', function(data) {
 	});
     };
 
-    
-    })
+   
 })
 
 const Lista = React.createClass({

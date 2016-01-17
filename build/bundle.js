@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f796392d6301bc1c8920"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "fc591a5c3ecd661193d1"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -593,70 +593,69 @@
 
 	window.openclose = [];
 
-	fetch('miso.json').then(function (data) {
-					data.json().then(function (data) {
-									var pid_meals = _.groupBy(data.meals, function (m) {
-													return m.pID;
+	$.getJSON('miso.json', function (data) {
+
+					var pid_meals = _.groupBy(data.meals, function (m) {
+									return m.pID;
+					});
+
+					var gotPos = function gotPos() {
+									var now = new Date();
+									console.log(data.places);
+									window.openclose = _.compact(_.map(data.places, function (p) {
+													var d = getDistanceFromLatLonInKm(p.lat, p.lng, pos.latitude, pos.longitude);
+													if (p.openJSON) {
+																	var openobj = JSON.parse(p.openJSON);
+																	var hours = Object.keys(openobj);
+																	var ok = false;
+																	var to = null;
+																	_.each(hours, function (hs) {
+																					var from = parseInt(hs.split('-')[0].split(':')[0]);
+																					to = parseInt(hs.split('-')[1].split(':')[0]);
+																					if (to === from) {
+																									// 24 / 7
+																									ok = true;
+																									return;
+																					}
+																					to = to < 6 ? 24 - to : to;
+																					if (to < from) {
+																									var tfrom = from;
+																									from = to;
+																									to = tfrom;
+																					}
+
+																					var nowhs = now.getHours() - 8;
+
+																					if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
+																									if (from < nowhs && nowhs < to) {
+
+																													// console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
+																													ok = true;
+																									} else {
+																													console.log(from, nowhs, to, p);
+																									}
+																					}
+																	});
+
+																	if (ok) {
+																					return { p: p, d: d, hs: to + ':00', ms: pid_meals[p.pID] };
+																	}
+													}
+									})).sort(function (a, b) {
+													return a.d - b.d;
 									});
 
-									var gotPos = function gotPos() {
-													var now = new Date();
-													console.log(data.places);
-													window.openclose = _.compact(_.map(data.places, function (p) {
-																	var d = getDistanceFromLatLonInKm(p.lat, p.lng, pos.latitude, pos.longitude);
-																	if (p.openJSON) {
-																					var openobj = JSON.parse(p.openJSON);
-																					var hours = Object.keys(openobj);
-																					var ok = false;
-																					var to = null;
-																					_.each(hours, function (hs) {
-																									var from = parseInt(hs.split('-')[0].split(':')[0]);
-																									to = parseInt(hs.split('-')[1].split(':')[0]);
-																									if (to === from) {
-																													// 24 / 7
-																													ok = true;
-																													return;
-																									}
-																									to = to < 6 ? 24 - to : to;
-																									if (to < from) {
-																													var tfrom = from;
-																													from = to;
-																													to = tfrom;
-																									}
+									xupdate();
+					};
 
-																									var nowhs = now.getHours() - 8;
-
-																									if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
-																													if (from < nowhs && nowhs < to) {
-
-																																	// console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
-																																	ok = true;
-																													} else {
-																																	console.log(from, nowhs, to, p);
-																													}
-																									}
-																					});
-
-																					if (ok) {
-																									return { p: p, d: d, hs: to + ':00', ms: pid_meals[p.pID] };
-																					}
-																	}
-													})).sort(function (a, b) {
-																	return a.d - b.d;
-													});
-
-													xupdate();
-									};
-
-									if (_geo.geo.init()) {
-													_geo.geo.getCurrentPosition(function (p) {
-																	window.pos = p.coords;
-																	gotPos();
-													}, function () {
-																	console.warn('error getting postion', arguments);
-													});
-									};
-					});
+					if (_geo.geo.init()) {
+									_geo.geo.getCurrentPosition(function (p) {
+													window.pos = p.coords;
+													gotPos();
+									}, function () {
+													console.warn('error getting postion', arguments);
+									});
+					};
 	});
 
 	var Lista = _react2.default.createClass({
