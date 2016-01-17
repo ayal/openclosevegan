@@ -31,8 +31,8 @@ var days  = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
 window.openclose = [];
 
-fetch('miso.json').then(function(data) {
-    data.json().then(function(data){
+$.getJSON('miso.json', function(data) {
+
     var pid_meals = _.groupBy(data.meals, function(m){return m.pID;});
 
 
