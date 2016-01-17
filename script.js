@@ -51,7 +51,7 @@ $.getJSON('miso.json', function(data) {
 		    var to = parseInt(hs.split('-')[1].split(':')[0]);
 		    if (to === from) {
 			// 24 / 7
-			theto = to;
+			theto = '24/7';
 			ok = true;
 			return;
 		    }
@@ -78,7 +78,7 @@ $.getJSON('miso.json', function(data) {
 		})
 		
 		if (ok) {
-		    return {p: p, d: d, hs: theto+':00', ms: pid_meals[p.pID]};
+		    return {p: p, d: d, hs: theto === '24/7' ? theto : theto+':00', ms: pid_meals[p.pID]};
 		}
 	    }
 	})).sort((a,b)=>(a.d - b.d))

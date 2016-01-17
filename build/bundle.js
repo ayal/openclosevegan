@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "057185ec549eda979736"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "f2035206d8c78d40079c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -614,7 +614,7 @@
 																					var to = parseInt(hs.split('-')[1].split(':')[0]);
 																					if (to === from) {
 																									// 24 / 7
-																									theto = to;
+																									theto = '24/7';
 																									ok = true;
 																									return;
 																					}
@@ -639,7 +639,7 @@
 																	});
 
 																	if (ok) {
-																					return { p: p, d: d, hs: theto + ':00', ms: pid_meals[p.pID] };
+																					return { p: p, d: d, hs: theto === '24/7' ? theto : theto + ':00', ms: pid_meals[p.pID] };
 																	}
 													}
 									})).sort(function (a, b) {
