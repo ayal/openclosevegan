@@ -156,7 +156,7 @@ render((
     <Router history={createBrowserHistory()}>
     <Route path="/" component={App}>
     </Route>
-    <Route path="/opencloseveg/" component={App} >
+    <Route path="/openclosevegan/" component={App} >
     </Route>
     </Router>
 ), document.getElementById('content'));
