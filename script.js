@@ -32,7 +32,7 @@ var days  = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 window.openclose = [];
 
 fetch('miso.json').then(function(data) {
-    console.log(data);
+    data.json().then(function(){
     var pid_meals = _.groupBy(data.meals, function(m){return m.pID;});
 
 
@@ -97,6 +97,7 @@ fetch('miso.json').then(function(data) {
     };
 
     
+    })
 })
 
 const Lista = React.createClass({
