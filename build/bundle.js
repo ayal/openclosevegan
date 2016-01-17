@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f2035206d8c78d40079c"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6256bd84def840a6088b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -619,6 +619,7 @@
 																									return;
 																					}
 																					to = to < 6 ? 24 - to : to;
+																					from = from < 6 ? 24 - from : from;
 																					if (to < from) {
 																									var tfrom = from;
 																									from = to;

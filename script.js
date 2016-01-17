@@ -56,6 +56,7 @@ $.getJSON('miso.json', function(data) {
 			return;
 		    }
 		    to = to < 6 ? 24 - to : to;
+		    from = from < 6 ? 24 - from : from;
 		    if (to < from) {
 			var tfrom = from;
 			from = to;
