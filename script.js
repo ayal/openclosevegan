@@ -61,7 +61,7 @@ $.getJSON('miso.json', function(data) {
 			to = tfrom;
 		    }
 		    
-		    var nowhs = now.getHours() - 8;
+		    var nowhs = now.getHours();
 
 		    if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
 			if (from < nowhs && nowhs < to) {
