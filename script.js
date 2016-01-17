@@ -45,12 +45,13 @@ $.getJSON('miso.json', function(data) {
 		var openobj = JSON.parse(p.openJSON);
 		var hours = Object.keys(openobj);
 		var ok = false;
-		var to = null;
+		var theto = null;
 		_.each(hours, function(hs){
 		    var from = parseInt(hs.split('-')[0].split(':')[0]);
-		    to = parseInt(hs.split('-')[1].split(':')[0]);
+		    var to = parseInt(hs.split('-')[1].split(':')[0]);
 		    if (to === from) {
 			// 24 / 7
+			theto = to;
 			ok = true;
 			return;
 		    }
@@ -65,7 +66,7 @@ $.getJSON('miso.json', function(data) {
 
 		    if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
 			if (from < nowhs && nowhs < to) {
-
+			    theto = to;
 			    // console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
 			    ok = true;
 			    
@@ -77,7 +78,7 @@ $.getJSON('miso.json', function(data) {
 		})
 		
 		if (ok) {
-		    return {p: p, d: d, hs: to+':00', ms: pid_meals[p.pID]};
+		    return {p: p, d: d, hs: theto+':00', ms: pid_meals[p.pID]};
 		}
 	    }
 	})).sort((a,b)=>(a.d - b.d))

@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7236e1f791779e4bad35"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "12feeaf44245d74390e3"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -608,12 +608,13 @@
 																	var openobj = JSON.parse(p.openJSON);
 																	var hours = Object.keys(openobj);
 																	var ok = false;
-																	var to = null;
+																	var theto = null;
 																	_.each(hours, function (hs) {
 																					var from = parseInt(hs.split('-')[0].split(':')[0]);
-																					to = parseInt(hs.split('-')[1].split(':')[0]);
+																					var to = parseInt(hs.split('-')[1].split(':')[0]);
 																					if (to === from) {
 																									// 24 / 7
+																									theto = to;
 																									ok = true;
 																									return;
 																					}
@@ -628,7 +629,7 @@
 
 																					if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
 																									if (from < nowhs && nowhs < to) {
-
+																													theto = to;
 																													// console.log(p.name, _.map(pid_meals[p.pID],x=>x.title), p)
 																													ok = true;
 																									} else {
@@ -638,7 +639,7 @@
 																	});
 
 																	if (ok) {
-																					return { p: p, d: d, hs: to + ':00', ms: pid_meals[p.pID] };
+																					return { p: p, d: d, hs: theto + ':00', ms: pid_meals[p.pID] };
 																	}
 													}
 									})).sort(function (a, b) {
