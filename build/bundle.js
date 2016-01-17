@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "12feeaf44245d74390e3"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "057185ec549eda979736"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -625,7 +625,7 @@
 																									to = tfrom;
 																					}
 
-																					var nowhs = now.getHours();
+																					var nowhs = now.getHours() + 1;
 
 																					if (openobj[hs].indexOf(days[now.getDay()]) !== -1) {
 																									if (from < nowhs && nowhs < to) {
