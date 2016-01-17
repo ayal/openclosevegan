@@ -28,19 +28,13 @@ function deg2rad(deg) {
 
 var days  = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
-if(geo.init()){
-    geo.getCurrentPosition(function(p){
-        window.pos = p.coords;
-	gotPos();
-    }, function(){
-	console.warn('error getting postion', arguments);
-    });
-};
+
+window.openclose = [];
 
 $.get('miso.js', function(data) {
     var pid_meals = _.groupBy(data.meals, function(m){return m.pID;});
 
-    window.openclose = [];
+
     var gotPos = function() {
 	var now = new Date();
 	console.log(data.places)
@@ -91,6 +85,16 @@ $.get('miso.js', function(data) {
 	xupdate();    
     };
 
+
+    if(geo.init()){
+	geo.getCurrentPosition(function(p){
+            window.pos = p.coords;
+	    gotPos();
+	}, function(){
+	    console.warn('error getting postion', arguments);
+	});
+    };
+
     
 })
 
@@ -131,7 +135,7 @@ const Lista = React.createClass({
 	    <div>
 	    {places}
 	    </div>
-	    );
+	);
     }
 });
 
